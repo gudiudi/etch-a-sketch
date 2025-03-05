@@ -14,9 +14,52 @@ function createGrid(gridSize, container) {
   }
 }
 
+function clearGrid(container) {
+  container.innerHTML = '';
+}
+
+function getGridSize(container) {
+  const gridSize = prompt('Enter the grid size between 50 and 100:');
+
+  if (gridSize === null) {
+    return;
+  }
+
+  if (isNaN(gridSize)) {
+    return alert('Please enter a valid number');
+  }
+
+  if (gridSize < 50 || gridSize > 100) {
+    return alert('Please enter a grid size between 50 and 100');
+  }
+
+  return gridSize;
+}
+
 (() => {
+  let gridSize = 25;
+
   const container = document.querySelector('.container');
-  createGrid(25, container);
+  const btnContainer = document.querySelector('.btn-container');
+
+  createGrid(gridSize, container);
+
+  btnContainer.addEventListener('click', (event) => {
+    const target = event.target;
+    if (target.id === 'resize') { 
+      const size = getGridSize(container);
+      if (size) {
+        gridSize = size;
+        clearGrid(container);
+        createGrid(gridSize, container);
+      }
+    }
+
+    if (target.id === 'clear') {
+      clearGrid(container);
+      createGrid(gridSize, container);
+    }
+  });
 
   // Disable built-in drag and drop (🚫) behavior
   document.addEventListener("dragstart", (event) => event.preventDefault());
@@ -40,7 +83,3 @@ function createGrid(gridSize, container) {
 
   document.addEventListener('mouseup', () => (isDrawingMode = false));
 })();
-
-
-
-
